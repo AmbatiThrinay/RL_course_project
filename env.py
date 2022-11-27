@@ -300,16 +300,14 @@ class Acrobot:
 
 
 def wrap(x, m, M):
-    """Wraps ``x`` so m <= x <= M; but unlike ``bound()`` which
-    truncates, ``wrap()`` wraps x around the coordinate system defined by m,M.\n
-    For example, m = -180, M = 180 (degrees), x = 360 --> returns 0.
+    '''
     Args:
         x: a scalar
         m: minimum possible value in range
         M: maximum possible value in range
     Returns:
         x: a scalar, wrapped
-    """
+    '''
     diff = M - m
     while x > M:
         x = x - diff
@@ -319,15 +317,14 @@ def wrap(x, m, M):
 
 
 def bound(x, m, M=None):
-    """Either have m as scalar, so bound(x,m,M) which returns m <= x <= M *OR*
-    have m as length 2 vector, bound(x,m, <IGNORED>) returns m[0] <= x <= m[1].
+    '''
     Args:
         x: scalar
         m: The lower bound
         M: The upper bound
     Returns:
         x: scalar, bound between min (m) and Max (M)
-    """
+    '''
     if M is None:
         M = m[1]
         m = m[0]
@@ -336,24 +333,15 @@ def bound(x, m, M=None):
 
 
 def rk4(derivs, y0, t):
-    """
+    '''
     Integrate 1-D or N-D system of ODEs using 4-th order Runge-Kutta.
-    Example for 2D system:
-        >>> def derivs(x):
-        ...     d1 =  x[0] + 2*x[1]
-        ...     d2 =  -3*x[0] + 4*x[1]
-        ...     return d1, d2
-        >>> dt = 0.0005
-        >>> t = np.arange(0.0, 2.0, dt)
-        >>> y0 = (1,2)
-        >>> yout = rk4(derivs, y0, t)
     Args:
         derivs: the derivative of the system and has the signature ``dy = derivs(yi)``
         y0: initial state vector
         t: sample times
     Returns:
         yout: Runge-Kutta approximation of the ODE
-    """
+    '''
 
     try:
         Ny = len(y0)
