@@ -90,6 +90,9 @@ class Acrobot:
         self._reward = 0
         self._steps = 0
 
+        # height to which acrobot has to swing = total arm length/2 (default)
+        self._BAR_HEIGHT = 0.5*(self.LINK_LENGTH_1 + self.LINK_LENGTH_2)
+
         bound = self.LINK_LENGTH_1 + self.LINK_LENGTH_2 + 1  # 2.2 for default
         self.scale = self.SCREEN_DIM / (bound * 2)
         
@@ -125,7 +128,7 @@ class Acrobot:
         if not self._render_flag : self._clock.tick() # increment the game loop only if render step is missing
 
         # checking if the state is terminal state
-        self.done = bool(-np.cos(self._state[0]) - np.cos(self._state[1] + self._state[0]) > 1.0)
+        self.done = bool(-self.LINK_LENGTH_1 * np.cos(self._state[0]) - self.LINK_LENGTH_2 * np.cos(self._state[1] + self._state[0]) > self._BAR_HEIGHT)
         self.reward = -1.0 if not self.done else 0.0
         
         # End the episode if stimulations cross 500
@@ -200,8 +203,8 @@ class Acrobot:
 
         pygame.draw.aaline(
             surf, color=(0, 0, 0),
-            start_pos=(-2 * self.scale + offset, 1 * self.scale + offset),
-            end_pos=(2 * self.scale + offset, 1 * self.scale + offset),
+            start_pos=(-2 * self.scale + offset, self._BAR_HEIGHT * self.scale + offset),
+            end_pos=(2 * self.scale + offset, self._BAR_HEIGHT * self.scale + offset),
             blend=True
         )
 
@@ -226,7 +229,7 @@ class Acrobot:
                          (transformed_coords[-1][1]+transformed_coords[-2][1])/2)
             pygame.draw.aaline(surf,(241, 38, 11),
                                 start_pos=mid_point,
-                                end_pos=(mid_point[0],1 * self.scale + offset),blend=True)
+                                end_pos=(mid_point[0],self._BAR_HEIGHT * self.scale + offset),blend=True)
 
         surf = pygame.transform.flip(surf, False, True)
         if debug : surf = self.__render_stats(surf)
